@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"myToDoApp/pkg/handler"
+	"myToDoApp/enternal/handler"
 	"myToDoApp/service/server"
 )
 
