@@ -1,1 +1,8 @@
 port: "8000"
+
+db:
+  user: "rustam"
+  host: "192.168.1.138"
+  port: "5432"
+  dbname: "my_world"
+  sslmode: "disable"
