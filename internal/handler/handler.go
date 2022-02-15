@@ -2,9 +2,12 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 
-	"myToDoApp/internal/service"
+	"myToDoApp/internal/service/service"
 )
+
+var log = logrus.WithField("package", "handler")
 
 type Handler struct {
 	Service *service.Service

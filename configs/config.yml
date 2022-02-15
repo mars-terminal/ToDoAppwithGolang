@@ -1,4 +1,5 @@
-port: "8000"
+http:
+  port: "8000"
 
 db:
   user: "rustam"
