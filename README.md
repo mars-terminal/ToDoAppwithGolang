@@ -1,0 +1,3 @@
+# ToDoAppwithGolang
+
+RIP Приложение сдохла
