@@ -31,8 +31,11 @@ func (r *AuthPostgres) CreateUser(user user.User) (int, error) {
 func (r *AuthPostgres) GetUser(nickName, password string) (user.User, error) {
 	var get user.User
 
-	query := fmt.Sprintf(`SELECT id FROM %s WHERE nickname=$1 AND password=$2`, userTable)
+	query := fmt.Sprintf(`SELECT id FROM %s WHERE nickname=$1 AND password_hash=$2`, userTable)
 	err := r.db.Get(&get, query, nickName, password)
+	if err != nil {
+		return user.User{}, fmt.Errorf("failed to fetch user: %w", err)
+	}
 
 	return get, err
 }

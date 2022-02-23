@@ -37,7 +37,7 @@ func (s *AuthService) CreateUser(user user.User) (int, error) {
 func (s *AuthService) GenerateToken(nickName, password string) (string, error) {
 	userGen, err := s.repo.GetUser(nickName, generatePasswordHash(password))
 	if err != nil {
-		return "", nil
+		return "", fmt.Errorf("failed to get user: %w", err)
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, &tokenClaims{

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"myToDoApp/entities"
 	"myToDoApp/internal/repository"
 	"myToDoApp/internal/service/user"
 )
@@ -12,6 +13,9 @@ type Authorization interface {
 }
 
 type TodoList interface {
+	Create(userId int, list entities.TodoList) (int, error)
+	GetAll(userId int) ([]entities.TodoList, error)
+	GetById(userId, listId int) (entities.TodoList, error)
 }
 
 type TodoItem interface {
@@ -25,5 +29,8 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		Authorization: NewAuthService(repos.Authorization)}
+		Authorization: NewAuthService(repos.Authorization),
+		TodoItem:      NewTodoListService(repos),
+		TodoList:      NewTodoListService(repos),
+	}
 }

@@ -36,10 +36,33 @@ func (h *Handler) userIdentity(c *gin.Context) {
 
 	userId, err := h.Service.Authorization.ParseToken(headerParts[1])
 	if err != nil {
+		err := fmt.Errorf("cannot parse token: %w", err)
 		logger.WithError(err)
 
 		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
 	}
 
 	c.Set(userCTX, userId)
+}
+
+func getUserId(c *gin.Context) (int, error) {
+	logger := log.WithField("handler", "get user id")
+
+	id, ok := c.Get(userCTX)
+	if !ok {
+		err := fmt.Errorf("user id: %w", entities.ErrNotFound)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+	}
+
+	idInt, ok := id.(int)
+	if !ok {
+		err := fmt.Errorf("user id: %w, invalid type", entities.ErrNotFound)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+	}
+
+	return idInt, nil
 }
