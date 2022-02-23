@@ -3,6 +3,7 @@ module myToDoApp
 go 1.17
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.7.7 // indirect
@@ -31,8 +32,8 @@ require (
 	github.com/spf13/viper v1.10.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
-	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838 // indirect
-	golang.org/x/sys v0.0.0-20220204135822-1c1b9b1eba6a // indirect
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
+	golang.org/x/sys v0.0.0-20220222200937-f2425489ef4c // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.66.3 // indirect

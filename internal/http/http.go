@@ -1,4 +1,4 @@
-package server
+package http
 
 import (
 	"context"
@@ -21,7 +21,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		WriteTimeout:   1 * time.Second,
 	}
 
-	logrus.Infof("server listening at http://localhost:%s", port)
+	logrus.Infof("http listening at http://localhost:%s", port)
 
 	return s.httpServer.ListenAndServe()
 }

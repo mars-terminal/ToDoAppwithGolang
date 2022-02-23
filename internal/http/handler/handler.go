@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"myToDoApp/internal/service/service"
+	"myToDoApp/internal/service"
 )
 
 var log = logrus.WithField("package", "handler")
@@ -22,10 +22,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sing-up", h.singUp)
-		auth.POST("/sing-in", h.singIn)
+		auth.POST("/sign-up", h.signUp)
+		auth.POST("/sign-in", h.signIn)
 	}
-	api := router.Group("/api")
+	api := router.Group("/api", h.userIdentity)
 	{
 		lists := api.Group("/lists")
 		{

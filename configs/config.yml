@@ -7,3 +7,4 @@ db:
   port: "5432"
   dbname: "my_world"
   sslmode: "disable"
+

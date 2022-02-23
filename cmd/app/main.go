@@ -8,10 +8,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	"myToDoApp/internal/handler"
+	"myToDoApp/internal/http"
+	"myToDoApp/internal/http/handler"
 	"myToDoApp/internal/repository"
-	"myToDoApp/internal/service/server"
-	"myToDoApp/internal/service/service"
+	"myToDoApp/internal/service"
 )
 
 func init() {
@@ -66,9 +66,9 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 
-	srv := new(server.Server)
+	srv := new(http.Server)
 	if err := srv.Run(opts.HttpPORT, handlers.InitRoutes()); err != nil {
-		log.WithError(err).Fatal("error occured while running http server")
+		log.WithError(err).Fatal("error occured while running http http")
 	}
 }
 
