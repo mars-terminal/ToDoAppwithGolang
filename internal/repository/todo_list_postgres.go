@@ -58,3 +58,14 @@ func (r *TodoListRepository) GetById(userId, listId int) (entities.TodoList, err
 	err := r.db.Get(&list, query, userId, listId)
 	return list, err
 }
+
+func (r *TodoListRepository) Delete(userId, listId int) error {
+	query := fmt.Sprintf(`DELETE FROM %s tl USING %s ul WHERE 
+				tl.id = ul.todo_id AND ul.user_id = $1 AND ul.todo_id = $2`,
+		todoListsTable, usersListsTable)
+
+	_, err := r.db.Exec(query, userId, listId)
+
+	return err
+
+}

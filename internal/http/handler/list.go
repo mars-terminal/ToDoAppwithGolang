@@ -79,7 +79,7 @@ func (h *Handler) getListById(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		err := fmt.Errorf("error: %w", entities.ErrBadRequest)
+		err := fmt.Errorf("error: %w", err)
 		logger.WithError(err)
 
 		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
@@ -87,7 +87,7 @@ func (h *Handler) getListById(c *gin.Context) {
 
 	list, err := h.Service.TodoList.GetById(userId, id)
 	if err != nil {
-		err := fmt.Errorf("error: %w", entities.ErrInternal)
+		err := fmt.Errorf("error: %w", err)
 		logger.WithError(err)
 
 		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
@@ -96,5 +96,29 @@ func (h *Handler) getListById(c *gin.Context) {
 }
 
 func (h *Handler) deleteList(c *gin.Context) {
+	logger := log.WithField("handler", "delete list")
 
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+	}
+
+	err = h.Service.TodoList.Delete(userId, id)
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"status": "ok",
+	})
 }
