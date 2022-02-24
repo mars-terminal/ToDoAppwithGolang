@@ -28,3 +28,10 @@ func (t *TodoListService) GetById(userId, listId int) (entities.TodoList, error)
 func (t *TodoListService) Delete(userId, listId int) error {
 	return t.repo.Delete(userId, listId)
 }
+
+func (t *TodoListService) Update(userId, listId int, body entities.UpdateList) error {
+	if err := body.Validate(); err != nil {
+		return nil
+	}
+	return t.repo.Update(userId, listId, body)
+}

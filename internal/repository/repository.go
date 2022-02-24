@@ -17,6 +17,7 @@ type TodoList interface {
 	GetAll(userId int) ([]entities.TodoList, error)
 	GetById(userId, listId int) (entities.TodoList, error)
 	Delete(userId, listId int) error
+	Update(userId, listId int, body entities.UpdateList) error
 }
 
 type TodoItem interface {

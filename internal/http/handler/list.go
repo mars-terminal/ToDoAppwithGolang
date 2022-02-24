@@ -66,7 +66,41 @@ func (h *Handler) getAllLists(c *gin.Context) {
 }
 
 func (h *Handler) updateList(c *gin.Context) {
+	logger := log.WithField("handler", "update list")
 
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	var body entities.UpdateList
+	if err := c.BindJSON(&body); err != nil {
+		err := fmt.Errorf("error update list: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	if err := h.Service.Update(userId, id, body); err != nil {
+		err := fmt.Errorf("error service update: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"status": "ok",
+	})
 }
 
 func (h *Handler) getListById(c *gin.Context) {
