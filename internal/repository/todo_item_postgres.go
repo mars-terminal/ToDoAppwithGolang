@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 
@@ -73,5 +74,40 @@ func (t *TodoItemPostgres) Delete(userId, itemId int) error {
 		todoItemsTable, listItemsTable, usersListsTable)
 
 	_, err := t.db.Exec(query, userId, itemId)
+	return err
+}
+
+func (t *TodoItemPostgres) Update(userId, itemId int, body entities.UpdateItem) error {
+	setValue := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if body.Title != nil {
+		setValue = append(setValue, fmt.Sprintf("title = $%d", argId))
+		args = append(args, *body.Title)
+		argId++
+	}
+
+	if body.Description != nil {
+		setValue = append(setValue, fmt.Sprintf("description = $%d", argId))
+		args = append(args, *body.Description)
+		argId++
+	}
+
+	if body.Done != nil {
+		setValue = append(setValue, fmt.Sprintf("done = $%d", argId))
+		args = append(args, *body.Done)
+		argId++
+	}
+
+	setQuery := strings.Join(setValue, ", ")
+
+	query := fmt.Sprintf(`UPDATE %s ti SET %s FROM %s li, %s ul WHERE ti.id=li.item_id
+	AND ul.user_id=$%d AND ti.id=$%d`,
+		todoItemsTable, setQuery, listItemsTable, usersListsTable, argId, argId+1)
+
+	args = append(args, userId, itemId)
+
+	_, err := t.db.Exec(query, args...)
 	return err
 }

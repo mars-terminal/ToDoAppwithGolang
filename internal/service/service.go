@@ -25,6 +25,7 @@ type TodoItem interface {
 	GetAll(userId, listId int) ([]entities.TodoItem, error)
 	GetById(userId, itemId int) (entities.TodoItem, error)
 	Delete(userId, itemId int) error
+	Update(userId, itemId int, body entities.UpdateItem) error
 }
 
 type Service struct {

@@ -34,3 +34,7 @@ func (t *TodoItemService) GetById(userId, itemId int) (entities.TodoItem, error)
 func (t *TodoItemService) Delete(userId, itemId int) error {
 	return t.repo.Delete(userId, itemId)
 }
+
+func (t *TodoItemService) Update(userId, itemId int, body entities.UpdateItem) error {
+	return t.repo.Update(userId, itemId, body)
+}

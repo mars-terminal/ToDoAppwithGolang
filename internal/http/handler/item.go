@@ -80,7 +80,41 @@ func (h *Handler) getAllItem(c *gin.Context) {
 }
 
 func (h *Handler) updateItem(c *gin.Context) {
+	logger := log.WithField("handler", "update item")
 
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	var body entities.UpdateItem
+	if err := c.BindJSON(&body); err != nil {
+		err := fmt.Errorf("error update list: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	if err := h.Service.TodoItem.Update(userId, id, body); err != nil {
+		err := fmt.Errorf("error service update: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"status": "ok",
+	})
 }
 
 func (h *Handler) getItemById(c *gin.Context) {
@@ -113,7 +147,7 @@ func (h *Handler) getItemById(c *gin.Context) {
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
-	logger := log.WithField("handler", "get item by id")
+	logger := log.WithField("handler", "delete item")
 
 	userId, err := getUserId(c)
 	if err != nil {

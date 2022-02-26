@@ -31,11 +31,24 @@ type ListItem struct {
 
 type UpdateList struct {
 	Title       *string `json:"title"`
-	Description *string `json:"description" `
+	Description *string `json:"description"`
 }
 
 func (i UpdateList) Validate() error {
 	if i.Title == nil && i.Description == nil {
+		return errors.New("value is empty")
+	}
+	return nil
+}
+
+type UpdateItem struct {
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Done        *bool   `json:"done"`
+}
+
+func (i UpdateItem) Validate() error {
+	if i.Title == nil && i.Description == nil && i.Done == nil {
 		return errors.New("value is empty")
 	}
 	return nil

@@ -91,7 +91,7 @@ func (h *Handler) updateList(c *gin.Context) {
 		return
 	}
 
-	if err := h.Service.Update(userId, id, body); err != nil {
+	if err := h.Service.TodoList.Update(userId, id, body); err != nil {
 		err := fmt.Errorf("error service update: %w", err)
 		logger.WithError(err)
 
