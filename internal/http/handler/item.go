@@ -84,9 +84,62 @@ func (h *Handler) updateItem(c *gin.Context) {
 }
 
 func (h *Handler) getItemById(c *gin.Context) {
+	logger := log.WithField("handler", "get item by id")
 
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	itemId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	item, err := h.Service.TodoItem.GetAll(userId, itemId)
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, item)
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
+	logger := log.WithField("handler", "get item by id")
+
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	itemId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	err = h.Service.TodoItem.Delete(userId, itemId)
+	if err != nil {
+		err := fmt.Errorf("error: %w", err)
+		logger.WithError(err)
+
+		utils.NewErrorResponse(logger, c, utils.ParseErrorToHTTPErrorCode(err), err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"status": "ok",
+	})
 
 }
